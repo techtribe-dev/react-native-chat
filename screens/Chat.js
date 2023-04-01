@@ -8,7 +8,7 @@ import { styles } from "../utils/styles";
 
 const Chat = () => {
 	const [visible, setVisible] = useState(false);
-	const [rooms, setRooms] = useState([]);
+	const [rooms, setRooms] = useState({});
 
 	useLayoutEffect(() => {
 		function fetchGroups() {
@@ -21,8 +21,11 @@ const Chat = () => {
 	}, []);
 
 	useEffect(() => {
-		socket.on("roomsList", (rooms) => {
-			setRooms(rooms);
+		socket.on("roomsList", (data) => {
+			setRooms(prevState => ({
+				...prevState,
+				[data.id]:data
+			}));
 		});
 	}, [socket]);
 
